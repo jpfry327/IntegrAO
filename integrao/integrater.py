@@ -244,7 +244,12 @@ class integrao_predictor(object):
     
     def inference_unsupervised(self, model_path, new_datasets, modalities_names):
         # loop through the new_dataset and create Graphdatase
-        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        if torch.cuda.is_available():
+            device = torch.device("cuda:0")
+        elif torch.backends.mps.is_available():
+            device = torch.device("mps")
+        else:
+            device = torch.device("cpu")
 
         from integrao.IntegrAO_unsupervised import IntegrAO
         model = IntegrAO(self.feature_dims, self.hidden_channels, self.embedding_dims).to(device)
@@ -303,7 +308,12 @@ class integrao_predictor(object):
     
     def interpret_unsupervised(self, model_path, result_dir, new_datasets, modalities_names):
         # loop through the new_dataset and create Graphdatase
-        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        if torch.cuda.is_available():
+            device = torch.device("cuda:0")
+        elif torch.backends.mps.is_available():
+            device = torch.device("mps")
+        else:
+            device = torch.device("cpu")
 
         from integrao.IntegrAO_unsupervised import IntegrAO
         model = IntegrAO(self.feature_dims, self.hidden_channels, self.embedding_dims).to(device)
@@ -383,7 +393,12 @@ class integrao_predictor(object):
 
     def inference_supervised(self, model_path, new_datasets, modalities_names):
         # loop through the new_dataset and create Graphdatase
-        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        if torch.cuda.is_available():
+            device = torch.device("cuda:0")
+        elif torch.backends.mps.is_available():
+            device = torch.device("mps")
+        else:
+            device = torch.device("cpu")
 
         from integrao.IntegrAO_supervised import IntegrAO
         model = IntegrAO(self.feature_dims, self.hidden_channels, self.embedding_dims, num_classes=self.num_classes).to(device)
@@ -421,7 +436,12 @@ class integrao_predictor(object):
 
     def interpret_supervised(self, model_path, result_dir, new_datasets, modalities_names):
         # loop through the new_dataset and create Graphdatase
-        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        if torch.cuda.is_available():
+            device = torch.device("cuda:0")
+        elif torch.backends.mps.is_available():
+            device = torch.device("mps")
+        else:
+            device = torch.device("cpu")
 
         from integrao.IntegrAO_supervised import IntegrAO
         model = IntegrAO(self.feature_dims, self.hidden_channels, self.embedding_dims, num_classes=self.num_classes).to(device)
