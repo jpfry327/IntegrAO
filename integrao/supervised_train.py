@@ -19,7 +19,12 @@ from integrao.dataset import GraphDataset
 import torch_geometric.transforms as T
 
 def tsne_loss(P, activations):
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    if torch.cuda.is_available():
+        device = torch.device("cuda:0")
+    elif torch.backends.mps.is_available():
+        device = torch.device("mps")
+    else:
+        device = torch.device("cpu")
     n = activations.size(0)
     alpha = 1
     eps = 1e-12
@@ -58,7 +63,7 @@ def init_model(net, device, restore):
 
     if torch.cuda.is_available():
         cudnn.benchmark = True
-        net.to(device)
+    net.to(device)
 
     return net
 
@@ -101,7 +106,12 @@ def tsne_p_deep_classification(dicts_commonIndex, dict_sampleToIndexs, dict_orig
 
     print("Starting supervised fineting!")
     start_time = time.time()
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    if torch.cuda.is_available():
+        device = torch.device("cuda:0")
+    elif torch.backends.mps.is_available():
+        device = torch.device("mps")
+    else:
+        device = torch.device("cpu")
 
     hidden_channels = 128 # TODO: change to using ymal file
     dataset_num = len(P)
