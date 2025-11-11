@@ -95,10 +95,13 @@ def tsne_p_deep(dicts_commonIndex, dict_sampleToIndexs, data, P=np.array([]), ne
     print("Starting unsupervised exmbedding extraction!")
     start_time = time.time()
     if torch.cuda.is_available():
+        print("Using CUDA backend.")
         device = torch.device("cuda:0")
     elif torch.backends.mps.is_available():
+        print("Using MPS backend.")
         device = torch.device("mps")
     else:
+        print("Using CPU backend.")
         device = torch.device("cpu")
 
     hidden_channels = 128 # TODO: change to using ymal file
