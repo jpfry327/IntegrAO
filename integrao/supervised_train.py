@@ -199,12 +199,16 @@ def tsne_p_deep_classification(dicts_commonIndex, dict_sampleToIndexs, dict_orig
 
     # get the final embeddings for all samples
     embeddings, X_embedding_avg, preds, _ = Project_GNN(x_dict, edge_index_dict, dict_original_order)
-    pred = pred.detach().cpu().numpy()
-            
+
+    # Calculate probabilities and predicted labels
+    preds_proba = F.softmax(preds, dim=1)
+    preds_proba = preds_proba.detach().cpu().numpy()
+    preds_labels = np.argmax(preds_proba, axis=1)
+
     # Now I need to put X_embedding_avg in order
     final_embeddings = X_embedding_avg.detach().cpu().numpy()
 
     end_time = time.time()
     print("Manifold alignment ends! Times: {}s".format(end_time - start_time))
 
-    return final_embeddings, Project_GNN, preds
+    return final_embeddings, Project_GNN, preds_labels, preds_proba

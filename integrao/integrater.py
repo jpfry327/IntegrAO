@@ -122,7 +122,7 @@ class integrao_integrater(object):
         # reorder of clf_labels to make it the same with self.dict_sampleToIndexs.keys()
         clf_labels = clf_labels.loc[self.dict_sampleToIndexs.keys()]
 
-        S_final, self.models, preds = tsne_p_deep_classification(
+        S_final, self.models, preds_labels, preds_proba = tsne_p_deep_classification(
             self.dicts_commonIndex,
             self.dict_sampleToIndexs,
             self.dict_original_order,
@@ -149,7 +149,7 @@ class integrao_integrater(object):
 
         Wall_final = _stable_normalized(Wall_final)
 
-        return self.final_embeds, Wall_final, self.models, preds
+        return self.final_embeds, Wall_final, self.models, preds_labels, preds_proba
 
 
 class integrao_predictor(object):
@@ -427,11 +427,11 @@ class integrao_predictor(object):
             x_dict, edge_index_dict, self.dict_original_order
         )
 
-        preds = F.softmax(preds, dim=1)
-        preds = preds.detach().cpu().numpy()
-        preds = np.argmax(preds, axis=1)
+        preds_proba = F.softmax(preds, dim=1)
+        preds_proba = preds_proba.detach().cpu().numpy()
+        preds_labels = np.argmax(preds_proba, axis=1)
 
-        return preds
+        return preds_labels, preds_proba
 
 
     def interpret_supervised(self, model_path, result_dir, new_datasets, modalities_names):
