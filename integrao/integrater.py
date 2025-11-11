@@ -391,7 +391,21 @@ class integrao_predictor(object):
         return  df_list
 
 
-    def inference_supervised(self, model_path, new_datasets, modalities_names):
+    def inference_supervised(self, model_path, new_datasets, modalities_names, return_probabilities=False):
+        """
+        Perform supervised inference on new datasets.
+
+        Args:
+            model_path: Path to the trained model
+            new_datasets: List of new datasets to predict on
+            modalities_names: List of modality names corresponding to new_datasets
+            return_probabilities: If True, returns probability arrays instead of class labels.
+                                 If False (default), returns predicted class labels.
+
+        Returns:
+            If return_probabilities=False: numpy array of predicted class labels (shape: [n_samples])
+            If return_probabilities=True: numpy array of class probabilities (shape: [n_samples, n_classes])
+        """
         # loop through the new_dataset and create Graphdatase
         if torch.cuda.is_available():
             device = torch.device("cuda:0")
@@ -429,9 +443,12 @@ class integrao_predictor(object):
 
         preds = F.softmax(preds, dim=1)
         preds = preds.detach().cpu().numpy()
-        preds = np.argmax(preds, axis=1)
 
-        return preds
+        if return_probabilities:
+            return preds
+        else:
+            preds = np.argmax(preds, axis=1)
+            return preds
 
 
     def interpret_supervised(self, model_path, result_dir, new_datasets, modalities_names):
