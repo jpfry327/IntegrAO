@@ -199,8 +199,8 @@ def tsne_p_deep_classification(dicts_commonIndex, dict_sampleToIndexs, dict_orig
 
     # get the final embeddings for all samples
     embeddings, X_embedding_avg, preds, _ = Project_GNN(x_dict, edge_index_dict, dict_original_order)
-    pred = pred.detach().cpu().numpy()
-            
+    preds = preds.detach().cpu().numpy()
+
     # Now I need to put X_embedding_avg in order
     final_embeddings = X_embedding_avg.detach().cpu().numpy()
 
